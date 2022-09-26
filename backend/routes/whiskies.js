@@ -42,7 +42,7 @@ router.route("/:id").delete((req, res) => {
 router.route("/update/:id").post((req, res) => {
   Whiskey.findById(req.params.id)
     .then((whiskey) => {
-      whiskey.username = req.body.username;
+      whiskey.whiskeyTitle = req.body.whiskeyTitle;
       whiskey.description = req.body.description;
       whiskey.price = Number(req.body.price);
       whiskey.date = Date.parse(req.body.date);

@@ -1,0 +1,84 @@
+.formContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2em;
+}
+
+.formContainer form {
+  width: 70%;
+}
+
+@import "https://unicons.iconscout.com/release/v4.0.0/css/thinline.css";
+
+.formFrame {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+form {
+  width: 80%;
+  align-items: center;
+}
+
+.wrapper {
+  padding: 1em;
+}
+
+.wrapper label {
+  margin-bottom: 1em;
+}
+
+.content {
+  border: none;
+}
+
+.content ul {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 7px;
+  border: 1px solid #a6a6a6;
+  border-radius: 0.3em;
+}
+
+.content ul li {
+  list-style: none;
+  display: flex;
+  flex-direction: row;
+  background: #492712;
+  color: white;
+  padding: 0.5em;
+  border-radius: 0.3em;
+  margin: 0 0.5em 0 0;
+  border: none;
+}
+
+.content ul li span {
+  height: 1.7em;
+  width: 1.7em;
+  font-size: 1em;
+  text-align: center;
+  margin-top: -0.05em;
+  line-height: 1.5em;
+  margin-left: 0.7em;
+  border-radius: 50%;
+  border: 1px solid white;
+  color: white;
+}
+
+.content ul input {
+  width: 100%;
+  flex: 1;
+  outline: none;
+  padding: 5px;
+  font-size: 1em;
+  border: none;
+}
+
+.wrapper .details {
+  display: flex;
+  justify-content: space-between;
+}

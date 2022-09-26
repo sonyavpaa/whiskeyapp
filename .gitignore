@@ -21,6 +21,7 @@ backend/.pnp.js
 .env.test.local
 .env.production.local
 backend/.env
+notes.md
 
 npm-debug.log*
 yarn-debug.log*
