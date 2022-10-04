@@ -18,6 +18,7 @@ const AddWhiskey = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
+
     const whiskey = {
       whiskeyTitle: inputData.whiskeyTitle,
       description: inputData.description,
@@ -103,7 +104,12 @@ const AddWhiskey = () => {
   // ******************
   return (
     <div className="formContainer">
-      <form onSubmit={onSubmit}>
+      <form
+        onKeyPress={(e) => {
+          if (e.key === "Enter") e.preventDefault();
+        }}
+        onSubmit={onSubmit}
+      >
         <div className="form-group">
           <label htmlFor="exampleFormControlInput1">Whiskey name</label>
           <input
@@ -160,6 +166,7 @@ const AddWhiskey = () => {
           className="button form-control"
           type="submit"
           value="Add whiskey"
+          onClick={onSubmit}
         />
       </form>
     </div>
