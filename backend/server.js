@@ -1,20 +1,29 @@
 // const express = require("express");
 // const cors = require("cors");
 
-import express from "express";
-import cors from "cors";
-
-import users from "./routes/users";
-// import whiskies from "./routes/whiskies";
-
 // const mongoose = require("mongoose");
 // require("dotenv").config();
 
+import express from "express";
+import cors from "cors";
+import users from "./api/users.route.js";
+import whiskies from "./api/whiskies.route.js";
+
 const app = express();
-const port = process.env.PORT || 5001;
 
 app.use(cors());
 app.use(express.json());
+
+app.use("/api/v1/users", users);
+app.use("/api/v1/whiskies", whiskies);
+
+// const port = process.env.PORT || 5001;
+
+app.use("*", (req, res) =>
+  res.status(404).json({ error: "Not found, sorry!" })
+);
+
+export default app;
 
 // const uri = process.env.ATLAS_URI;
 // mongoose.connect(uri, { useNewUrlParser: true });
@@ -28,14 +37,6 @@ app.use(express.json());
 
 // app.use("/users", usersRouter);
 // app.use("/whiskies", whiskiesRouter);
-
-app.use("/api/v1/users", users);
-app.use(
-  "*",
-  (req, (res) => res.status(404).json({ error: "not found, sorry!" }))
-);
-
-export default app;
 
 // app.listen(port, () => {
 //   console.log(`Server is running on port: ${port}`);
