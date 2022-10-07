@@ -12,11 +12,11 @@ export default class whiskiesController {
     let filters = {};
     if (req.query.distillery) {
       filters.distillery = req.query.distillery;
-    } else if (req.query.name) {
-      filters.name = req.query.name;
+    } else if (req.query.whiskeyTitle) {
+      filters.whiskeyTitle = req.query.whiskeyTitle;
     }
 
-    const { whiskiesList, totalNumWhiskies } = await WhiskiesDAO.getWhiskey({
+    const { whiskiesList, totalNumWhiskies } = await WhiskiesDAO.getWhiskies({
       filters,
       page,
       whiskiesPerPage,
@@ -30,5 +30,78 @@ export default class whiskiesController {
       total_results: totalNumWhiskies,
     };
     res.json(response);
+  }
+
+  static async apiAddWhiskey(req, res, next) {
+    try {
+      // const whiskeyId = req.body.id;
+      const whiskeyTitle = req.body.whiskeyTitle;
+      const distillery = req.body.distillery;
+      const region = req.body.region;
+      const country = req.body.country;
+      const description = req.body.description;
+      const price = req.body.price;
+      const tags = req.body.tags;
+      const WhiskeyResponse = await WhiskiesDAO.addWhiskey(
+        whiskeyId,
+        whiskeyTitle,
+        distillery,
+        region,
+        country,
+        description,
+        price,
+        tags
+      );
+      res.json({ status: "success" });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  }
+
+  static async apiEditWhiskey(req, res, next) {
+    try {
+      const whiskeyId = req.body._id;
+      const whiskeyTitle = req.body.whiskeyTitle;
+      const distillery = req.body.distillery;
+      const region = req.body.region;
+      const country = req.body.country;
+      const description = req.body.description;
+      const price = req.body.price;
+      const tags = req.body.tags;
+      const whiskeyResponse = await WhiskiesDAO.editWhiskey(
+        whiskeyId,
+        whiskeyTitle,
+        distillery,
+        region,
+        country,
+        description,
+        price,
+        tags
+      );
+      var { error } = whiskeyResponse;
+      if (error) {
+        res.status(400).json({ error });
+      }
+      if (whiskeyResponse.modifiedCount === 0) {
+        throw new Error(
+          "Unable to update whiskey - user may not be original poster"
+        );
+      }
+      res.json({ status: "success" });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  }
+
+  static async apiDeleteWhiskey(req, res, next) {
+    try {
+      // const whiskeyId = req.query.id;
+      const whiskeyId = req.body._id;
+      console.log("whiskeyId from whiskies.controller.js: ", whiskeyId);
+      const whiskeyResponse = await WhiskiesDAO.deleteWhiskey(whiskeyId);
+      res.json({ status: "success" });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
   }
 }
