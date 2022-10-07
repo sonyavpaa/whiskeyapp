@@ -4,11 +4,12 @@ let tags = [];
 
 const AddWhiskey = () => {
   const [inputData, setInputData] = useState({
-    username: "",
+    whiskeyTitle: "default",
+    distillery: "",
+    region: "",
+    country: "",
     description: "",
     price: 0,
-    date: new Date(),
-    users: [],
     tags: [],
   });
 
@@ -21,9 +22,12 @@ const AddWhiskey = () => {
 
     const whiskey = {
       whiskeyTitle: inputData.whiskeyTitle,
+      distillery: inputData.distillery,
+      region: inputData.region,
+      country: inputData.country,
       description: inputData.description,
       price: inputData.price,
-      date: inputData.date,
+      tags: inputData.tags,
     };
 
     console.log("whiskey:", whiskey);
@@ -111,18 +115,51 @@ const AddWhiskey = () => {
         onSubmit={onSubmit}
       >
         <div className="form-group">
-          <label htmlFor="exampleFormControlInput1">Whiskey name</label>
+          <label htmlFor="whiskeyTitle">Whiskey name</label>
           <input
             type="text"
             className="form-control"
             id="whiskeyTitle"
             name="whiskeyTitle"
-            placeholder="e.g. Ardberg"
+            placeholder="e.g. Kyrö Wood Smoke"
             onChange={changeData}
           />
         </div>
         <div className="form-group">
-          <label htmlFor="exampleFormControlTextarea1">Description</label>
+          <label htmlFor="distillery">Distillery</label>
+          <input
+            type="text"
+            className="form-control"
+            id="distillery"
+            name="distillery"
+            placeholder="e.g. Kyrö Distillery"
+            onChange={changeData}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="region">Region</label>
+          <input
+            type="text"
+            className="form-control"
+            id="region"
+            name="region"
+            placeholder="e.g. Osterbothnia"
+            onChange={changeData}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="country">Country</label>
+          <input
+            type="text"
+            className="form-control"
+            id="country"
+            name="country"
+            placeholder="e.g. Finland"
+            onChange={changeData}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="description">Description</label>
           <textarea
             className="form-control"
             id="description"

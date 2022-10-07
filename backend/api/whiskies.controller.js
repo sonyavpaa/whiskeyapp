@@ -32,6 +32,31 @@ export default class whiskiesController {
     res.json(response);
   }
 
+  // static async apiGetWhiskeyById(res, req, next) {
+  //   try {
+  //     let id = req.params.id || {};
+  //     let whiskey = await WhiskiesDAO.getWhiskeyById(id);
+  //     if (!whiskey) {
+  //       res.status(404).json({ error: "Not found :-(" });
+  //       return;
+  //     }
+  //     res.json(whiskey);
+  //   } catch (err) {
+  //     console.log(`api, ${err}`);
+  //     res.status(500).json({ error: err });
+  //   }
+  // }
+
+  static async apiGetWhiskeyDistilleries(req, res, next) {
+    try {
+      let distilleries = await WhiskiesDAO.getWhiskeyDistilleries();
+      res.json(distilleries);
+    } catch (err) {
+      console.log(`api, ${err}`);
+      res.status(500).json({ error: err });
+    }
+  }
+
   static async apiAddWhiskey(req, res, next) {
     try {
       // const whiskeyId = req.body.id;
@@ -43,7 +68,6 @@ export default class whiskiesController {
       const price = req.body.price;
       const tags = req.body.tags;
       const WhiskeyResponse = await WhiskiesDAO.addWhiskey(
-        whiskeyId,
         whiskeyTitle,
         distillery,
         region,

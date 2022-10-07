@@ -62,6 +62,9 @@ import whiskiesController from "./whiskies.controller.js";
 const router = express.Router();
 router.route("/").get(whiskiesController.apiGetWhiskies);
 
+// router.route("/id/id:").get(whiskiesController.apiGetWhiskeyById);
+router.route("/distilleries").get(whiskiesController.apiGetWhiskeyDistilleries);
+
 router
   .route("/action")
   .post(whiskiesController.apiAddWhiskey)

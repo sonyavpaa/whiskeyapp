@@ -5,7 +5,7 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 
-function NavbarCustom() {
+function NavbarCustom(props) {
   return (
     <Navbar bg="light" expand="lg">
       <Container fluid>
@@ -18,7 +18,20 @@ function NavbarCustom() {
             navbarScroll
           >
             <Nav.Link href="addwhiskey">Add whiskey</Nav.Link>
-            <Nav.Link href="/">Edit user</Nav.Link>
+            <Nav.Link href="/distilleries">Distilleries</Nav.Link>
+
+            {props.user ? (
+              <a
+                onClick={props.userActive}
+                className="nav-link"
+                style={{ cursor: "pointer" }}
+              >
+                Logout {props.user.name}{" "}
+              </a>
+            ) : (
+              <Nav.Link href="/login"> Login </Nav.Link>
+            )}
+
             {/* <NavDropdown title="Link" id="navbarScrollingDropdown">
               <NavDropdown.Item href="#action3">Action</NavDropdown.Item>
               <NavDropdown.Item href="#action4">

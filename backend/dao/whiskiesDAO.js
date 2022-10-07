@@ -51,8 +51,46 @@ export default class WhiskiesDAO {
     }
   }
 
+  // static async getWhiskeyById(id) {
+  //   try{
+  //     const pipeline = [
+  //       {
+  //         $match: {
+  //           _id: new ObjectId(id),
+  //         },
+  //       },
+  //       {
+  //         $lookup:{
+  //           from: "whiskies",
+  //           let: {
+  //             id: "$_id",
+  //           },
+  //           pipeline: [
+  //             {
+  //               $match: {
+  //                 $expr: {
+  //                   $eq: ["$$id"],
+  //                 }
+  //               }
+  //             }
+  //           ]
+  //         }
+  //       }
+  //     ]
+  //   }
+  // };
+
+  static async getWhiskeyDistilleries() {
+    let distilleries = [];
+    try {
+      distilleries = await whiskies.distinct("distillery");
+      return distilleries;
+    } catch (err) {
+      console.error(`Unable to get distilleries, ${err}`);
+      return distilleries;
+    }
+  }
   static async addWhiskey(
-    whiskeyId,
     whiskeyTitle,
     distillery,
     region,
@@ -63,7 +101,6 @@ export default class WhiskiesDAO {
   ) {
     try {
       const whiskeyDoc = {
-        whiskey_id: ObjectId(whiskeyId),
         whiskeyTitle: whiskeyTitle,
         distillery: distillery,
         region: region,
