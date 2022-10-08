@@ -75,7 +75,7 @@ const WhiskiesList = (props) => {
   return (
     <div className="whiskieListPageContainer">
       <div className="searchBars">
-        <form className="form-inline">
+        <div className="searchContainer form-inline">
           <input
             className="form-control mr-sm-2"
             type="search"
@@ -83,6 +83,11 @@ const WhiskiesList = (props) => {
             value={searchTitle}
             onChange={searchTitleHandler}
             aria-label="Search"
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                findByTitle(e.currentTarget.value);
+              }
+            }}
           />
           <button
             className="btn btn-outline-success my-2 my-sm-0"
@@ -91,14 +96,14 @@ const WhiskiesList = (props) => {
           >
             Search
           </button>
-        </form>
+        </div>
 
-        <form className="select input-group">
-          <select className="select" onChange={searchDistilleryHandler}>
-            {distilleries.map((distillery) => {
+        <div className="selectContainer input-group">
+          <select onChange={searchDistilleryHandler}>
+            {distilleries.map((distillery, i) => {
               return (
-                <option value={distillery}>
-                  <p>{distillery.substr(0, 20)}</p>
+                <option value={distillery} key={i}>
+                  {distillery.substr(0, 20)}
                 </option>
               );
             })}
@@ -109,12 +114,32 @@ const WhiskiesList = (props) => {
               type="button"
               onClick={findByDistillery}
             >
-              Search
+              Select
             </button>
           </div>
-        </form>
+        </div>
       </div>
-      whiskies will be listed here
+      <div className="whiskeyListContainer">
+        {whiskies.map((whiskey, i) => {
+          return (
+            <div className="whiskeyCard" key={i}>
+              <h5>{whiskey.whiskeyTitle}</h5>
+              <p>{whiskey.region}</p>
+              <p>{whiskey.country}</p>
+              <p>{whiskey.description}</p>
+              <p>{whiskey.price}</p>
+              <div className="tagsContainer">
+                {whiskey?.tags?.map((tag, i) => (
+                  <p className="tag" key={i}>
+                    {tag}
+                  </p>
+                ))}
+              </div>
+            </div>
+          );
+        })}
+        whiskies will be listed here
+      </div>
     </div>
   );
 };

@@ -11,7 +11,8 @@
   align-items: center;
 }
 
-.searchBars form {
+.searchBars .searchContainer,
+.searchBars .selectContainer {
   width: 22em;
   margin-bottom: 1em;
   display: flex;
@@ -23,12 +24,11 @@
   margin-right: 1em;
   font-size: 0.8em;
 }
-select {
-  appearance: none;
-}
 
-.searchBars .select select {
+.searchBars .selectContainer select {
+  appearance: none;
   width: 80%;
+  height: 2.56em;
   background-color: transparent;
   border: 0.5px grey solid;
   border-right: none;
@@ -37,42 +37,10 @@ select {
   padding-left: 0.5em;
 }
 
-.select {
-  width: 100%;
-  min-width: 15ch;
-  max-width: 30ch;
-  border: 1px solid var(--select-border);
-  border-radius: 0.25em;
-  padding: 0.25em 0.5em;
-  font-size: 1.25rem;
-  cursor: pointer;
-  line-height: 1.1;
-  background-color: #fff;
-  background-image: linear-gradient(to top, #f9f9f9, #fff 33%);
-}
-
-select option::selection {
-  background-color: aqua;
-  border: 1px solid red;
-}
-
-select:focus {
-  color: blueviolet !important;
-  background-color: aqua !important;
-  background: black;
-}
-
-option:focus {
-  background-color: red !important;
-  background: red !important;
-}
-option {
-  background-color: ;
-}
-
-.searchBars .select button {
+.searchBars .selectContainer button {
   border-radius: 0 0.35em 0.35em 0;
   border: 0.5px grey solid;
   margin-left: -5em;
   border-left: none;
+  width: 5em;
 }
