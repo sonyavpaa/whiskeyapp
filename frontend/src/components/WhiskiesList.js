@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+
 import "../style/WhiskiesList.css";
+
+import WhiskeyCard from "./WhiskeyCard";
 
 import WhiskeyDataService from "../services/whiskies";
 
-const WhiskiesList = (props) => {
+const WhiskiesList = () => {
   const [whiskies, setWhiskies] = useState([]);
   const [searchTitle, setSearchTitle] = useState("");
-  const [searchDistillery, setSearchDistillery] = useState("");
+  // const [searchDistillery, setSearchDistillery] = useState("");
   const [distilleries, setDistilleries] = useState(["All Distilleries"]);
 
   useEffect(() => {
@@ -21,14 +23,17 @@ const WhiskiesList = (props) => {
   };
 
   const searchDistilleryHandler = (e) => {
-    const searchDistillery = e.target.value;
-    setSearchDistillery(searchDistillery);
+    // const searchDistillery = e.target.value;
+    // setSearchDistillery(searchDistillery);
+    if (e.target.value != "All Distilleries")
+      find(e.target.value, "distillery");
+    else refreshList();
   };
 
   const retrieveWhiskies = () => {
     WhiskeyDataService.getWhiskies()
       .then((res) => {
-        console.log(`Retrieved whiskies: ${res.data}`);
+        // console.log(`Retrieved whiskies: ${res.data}`);
         setWhiskies(res.data.whiskies);
       })
       .catch((err) => console.log(`Error in retrieving whiskies: ${err}`));
@@ -37,7 +42,7 @@ const WhiskiesList = (props) => {
   const retrieveDistilleries = () => {
     WhiskeyDataService.getDistilleries()
       .then((res) => {
-        console.log(`Retrieved distilleries: ${res.data}`);
+        // console.log(`Retrieved distilleries: ${res.data}`);
         setDistilleries(["All Distilleries"].concat(res.data));
       })
       .catch((err) => {
@@ -52,7 +57,7 @@ const WhiskiesList = (props) => {
   const find = (query, by) => {
     WhiskeyDataService.find(query, by)
       .then((res) => {
-        console.log(`Data from find: ${res.data}`);
+        // console.log(`Data from find: ${JSON.stringify(res.data.whiskies)}`);
         setWhiskies(res.data.whiskies);
       })
       .catch((err) => {
@@ -64,16 +69,26 @@ const WhiskiesList = (props) => {
     find(searchTitle, "whiskeyTitle");
   };
 
-  const findByDistillery = () => {
-    if (searchDistillery == "All Distilleries") {
-      refreshList();
-    } else {
-      find(searchDistillery, "distillery");
-    }
+  const findByTag = (e) => {
+    find(e.target.value, "tags");
   };
+
+  // might not need this as distillery search happens onChange
+  // const findByDistillery = () => {
+  //   if (searchDistillery === "All Distilleries") {
+  //     refreshList();
+  //   } else {
+  //     find(searchDistillery, "distillery");
+  //   }
+  // };
 
   return (
     <div className="whiskieListPageContainer">
+      <img
+        className="logo"
+        alt="Barley & Bait logo"
+        src={require("../img/BARLEY-BAIT_logo_round_white-white.png")}
+      ></img>
       <div className="searchBars">
         <div className="searchContainer form-inline">
           <input
@@ -108,7 +123,7 @@ const WhiskiesList = (props) => {
               );
             })}
           </select>
-          <div className="input-group-append">
+          {/* <div className="input-group-append">
             <button
               className="btn btn-outline-secondary"
               type="button"
@@ -116,26 +131,17 @@ const WhiskiesList = (props) => {
             >
               Select
             </button>
-          </div>
+          </div> */}
         </div>
       </div>
       <div className="whiskeyListContainer">
         {whiskies.map((whiskey, i) => {
           return (
-            <div className="whiskeyCard" key={i}>
-              <h5>{whiskey.whiskeyTitle}</h5>
-              <p>{whiskey.region}</p>
-              <p>{whiskey.country}</p>
-              <p>{whiskey.description}</p>
-              <p>{whiskey.price}</p>
-              <div className="tagsContainer">
-                {whiskey?.tags?.map((tag, i) => (
-                  <p className="tag" key={i}>
-                    {tag}
-                  </p>
-                ))}
-              </div>
-            </div>
+            <WhiskeyCard
+              whiskey={whiskey}
+              key={i}
+              tagClicked={(e) => findByTag(e)}
+            />
           );
         })}
         whiskies will be listed here

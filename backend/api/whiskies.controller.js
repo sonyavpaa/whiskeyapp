@@ -14,6 +14,8 @@ export default class whiskiesController {
       filters.distillery = req.query.distillery;
     } else if (req.query.whiskeyTitle) {
       filters.whiskeyTitle = req.query.whiskeyTitle;
+    } else if (req.query.tags) {
+      filters.tags = req.query.tags;
     }
 
     const { whiskiesList, totalNumWhiskies } = await WhiskiesDAO.getWhiskies({
@@ -84,7 +86,7 @@ export default class whiskiesController {
 
   static async apiEditWhiskey(req, res, next) {
     try {
-      const whiskeyId = req.body._id;
+      const whiskeyId = req.query.id;
       const whiskeyTitle = req.body.whiskeyTitle;
       const distillery = req.body.distillery;
       const region = req.body.region;
@@ -92,16 +94,15 @@ export default class whiskiesController {
       const description = req.body.description;
       const price = req.body.price;
       const tags = req.body.tags;
-      const whiskeyResponse = await WhiskiesDAO.editWhiskey(
-        whiskeyId,
-        whiskeyTitle,
-        distillery,
-        region,
-        country,
-        description,
-        price,
-        tags
-      );
+      const whiskeyResponse = await WhiskiesDAO.editWhiskey(whiskeyId, {
+        whiskeyTitle: whiskeyTitle,
+        distillery: distillery,
+        region: region,
+        country: country,
+        description: description,
+        price: price,
+        tags: tags,
+      });
       var { error } = whiskeyResponse;
       if (error) {
         res.status(400).json({ error });
@@ -111,7 +112,7 @@ export default class whiskiesController {
           "Unable to update whiskey - user may not be original poster"
         );
       }
-      res.json({ status: "success" });
+      res.json({ status: `successfully edited ${whiskeyId}` });
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
@@ -119,11 +120,12 @@ export default class whiskiesController {
 
   static async apiDeleteWhiskey(req, res, next) {
     try {
-      // const whiskeyId = req.query.id;
-      const whiskeyId = req.body._id;
+      // NB check do you need to change the req.query to req.body once the front calls are being defined
+
+      const whiskeyId = await req.query.id;
       console.log("whiskeyId from whiskies.controller.js: ", whiskeyId);
       const whiskeyResponse = await WhiskiesDAO.deleteWhiskey(whiskeyId);
-      res.json({ status: "success" });
+      res.json({ status: `${whiskeyId} deleted successfully` });
     } catch (err) {
       res.status(500).json({ error: err.message });
     }

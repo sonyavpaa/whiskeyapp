@@ -1,0 +1,30 @@
+.whiskeyCard {
+  border-bottom: solid white;
+  margin: 1em;
+}
+
+.whiskeyCard h5 {
+  color: white;
+  font-family: "Abril Fatface", cursive;
+}
+
+.whiskeyCard p {
+  color: white;
+  font-family: "Nixie One", cursive;
+  margin-bottom: 0.5em;
+}
+
+.tagsContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}
+
+.tagsContainer button {
+  background: none;
+  border: none;
+  margin: 0 2em 1em -0.3em;
+  color: yellow;
+  font-family: "Nixie One", cursive;
+  text-align: left;
+}

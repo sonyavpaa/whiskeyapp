@@ -3,7 +3,6 @@ import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import NavDropdown from "react-bootstrap/NavDropdown";
 
 function NavbarCustom(props) {
   return (
@@ -29,7 +28,7 @@ function NavbarCustom(props) {
                 Logout {props.user.name}{" "}
               </a>
             ) : (
-              <Nav.Link href="/login"> Login </Nav.Link>
+              <Nav.Link href="/login">Login</Nav.Link>
             )}
 
             {/* <NavDropdown title="Link" id="navbarScrollingDropdown">

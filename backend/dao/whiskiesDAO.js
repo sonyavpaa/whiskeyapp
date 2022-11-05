@@ -26,6 +26,8 @@ export default class WhiskiesDAO {
         query = { $text: { $search: filters["whiskeyTitle"] } };
       } else if ("distillery" in filters) {
         query = { distillery: { $eq: filters["distillery"] } };
+      } else if ("tags" in filters) {
+        query = { tags: { $elemMatch: { $eq: filters["tags"] } } };
       }
     }
     let cursor;
@@ -90,6 +92,7 @@ export default class WhiskiesDAO {
       return distilleries;
     }
   }
+
   static async addWhiskey(
     whiskeyTitle,
     distillery,
@@ -116,28 +119,19 @@ export default class WhiskiesDAO {
     }
   }
 
-  static async editWhiskey(
-    whiskeyId,
-    whiskeyTitle,
-    distillery,
-    region,
-    country,
-    description,
-    price,
-    tags
-  ) {
+  static async editWhiskey(whiskeyQueryid, data) {
     try {
       const editResponse = await whiskies.updateOne(
-        { _id: ObjectId(whiskeyId) },
+        { _id: ObjectId(whiskeyQueryid) },
         {
           $set: {
-            whiskeyTitle: whiskeyTitle,
-            distillery: distillery,
-            region: region,
-            country: country,
-            description: description,
-            price: price,
-            tags: tags,
+            whiskeyTitle: data.whiskeyTitle,
+            distillery: data.distillery,
+            region: data.region,
+            country: data.country,
+            description: data.description,
+            price: data.price,
+            tags: data.tags,
           },
         }
       );

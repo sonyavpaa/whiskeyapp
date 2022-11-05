@@ -1,4 +1,5 @@
 import "bootstrap/dist/css/bootstrap.min.css";
+import "./style/root.css";
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useState } from "react";
@@ -14,10 +15,13 @@ function App() {
 
   async function login(user = null) {
     setUser(user);
+
+    console.log("logged in user", user);
   }
 
   async function logout() {
     setUser(null);
+    console.log("logout user ", user);
   }
 
   return (
@@ -25,11 +29,14 @@ function App() {
       <Routes>
         <Route
           path="/"
-          element={<LayOut user={user} userActive={(e) => logout} />}
+          element={<LayOut user={user} userActive={(e) => logout()} />}
         >
           <Route index element={<WhiskiesList />}></Route>
           <Route path="addwhiskey" element={<AddWhiskey />}></Route>
-          <Route path="login" element={<Login />}></Route>
+          <Route
+            path="login"
+            element={<Login user={user} loginUser={(e) => login("Sonja")} />}
+          ></Route>
           <Route path="distilleries" element={<Distilleries />}></Route>
         </Route>
       </Routes>
