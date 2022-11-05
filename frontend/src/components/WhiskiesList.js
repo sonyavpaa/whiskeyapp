@@ -20,6 +20,7 @@ const WhiskiesList = () => {
   const searchTitleHandler = (e) => {
     const searchTitle = e.target.value;
     setSearchTitle(searchTitle);
+    findByTitle(searchTitle);
   };
 
   const searchDistilleryHandler = (e) => {
@@ -65,7 +66,7 @@ const WhiskiesList = () => {
       });
   };
 
-  const findByTitle = () => {
+  const findByTitle = (searchTitle) => {
     find(searchTitle, "whiskeyTitle");
   };
 
@@ -95,8 +96,8 @@ const WhiskiesList = () => {
             className="form-control mr-sm-2"
             type="search"
             placeholder="Search whiskies by title..."
-            value={searchTitle}
-            onChange={searchTitleHandler}
+            // value={searchTitle}
+            onChange={(e) => searchTitleHandler(e)}
             aria-label="Search"
             onKeyDown={(e) => {
               if (e.key === "Enter") {
@@ -104,20 +105,17 @@ const WhiskiesList = () => {
               }
             }}
           />
-          <button
-            className="btn btn-outline-success my-2 my-sm-0"
-            type="button"
-            onClick={findByTitle}
-          >
-            Search
-          </button>
         </div>
 
         <div className="selectContainer input-group">
-          <select onChange={searchDistilleryHandler}>
+          <select>
             {distilleries.map((distillery, i) => {
               return (
-                <option value={distillery} key={i}>
+                <option
+                  onClick={searchDistilleryHandler}
+                  value={distillery}
+                  key={i}
+                >
                   {distillery.substr(0, 20)}
                 </option>
               );

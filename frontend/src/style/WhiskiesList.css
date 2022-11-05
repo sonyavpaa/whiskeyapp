@@ -23,6 +23,7 @@
   max-width: 22em;
   margin-bottom: 1em;
   display: flex;
+  flex-direction: row;
   justify-content: space-between;
   width: 25em;
 }
@@ -32,11 +33,22 @@
   font-size: 0.8em;
 }
 
+.searchContainer input {
+  height: 3em;
+  border: none;
+}
+
+.searchContainer button {
+  margin: 0 !important;
+  padding: 0 0.5 0 0.5 !important;
+  height: 2.4em;
+}
+
 .searchBars .selectContainer select {
   appearance: none;
   width: 80%;
   height: 2.56em;
-  background-color: transparent;
+
   border: 0.5px grey solid;
   border-right: none;
   border-radius: 0.35em;
