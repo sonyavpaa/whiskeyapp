@@ -1,11 +1,11 @@
 ## Whiskey App
 
-Fullstack project rendering a whiskey database using MERN stack. Not ready.
+Fullstack project rendering a whiskey database using MERN stack.
 
-## Useful resources
+Live deployment of frontend:
+https://whiskeystack.netlify.app
 
-MERN Stack Tutorial (MongoDB, Express, React, Node.js) by freeCodeCamp.org:
-https://www.youtube.com/watch?v=mrHNSanmqQ4
+NB! Backend server needs to be triggered to retrieve whiskies from the database.
 
 ## License
 
