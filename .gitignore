@@ -23,8 +23,13 @@ frontend/.env.local
 frontend/.env.development.local
 frontend/.env.test.local
 frontend/.env.production.local
-
+.env
 backend/.env
+frontend/.env
+backend/.git
+backend/.gitignore
+frontend/.git
+frontend/.gitignore
 notes.md
 
 frontend/npm-debug.log*

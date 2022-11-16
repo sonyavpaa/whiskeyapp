@@ -3,38 +3,24 @@ import React, { useState, useEffect } from "react";
 import "../style/WhiskiesList.css";
 
 import WhiskeyCard from "./WhiskeyCard";
-
 import WhiskeyDataService from "../services/whiskies";
+import SelectComponent from "./SelectComponent";
+
+let optionsArr = [{ value: "", label: "All Distilleries" }];
 
 const WhiskiesList = () => {
   const [whiskies, setWhiskies] = useState([]);
-  const [searchTitle, setSearchTitle] = useState("");
-  // const [searchDistillery, setSearchDistillery] = useState("");
-  const [distilleries, setDistilleries] = useState(["All Distilleries"]);
+  const [options, setOptions] = useState([]);
 
   useEffect(() => {
     retrieveWhiskies();
     retrieveDistilleries();
   }, []);
 
-  const searchTitleHandler = (e) => {
-    const searchTitle = e.target.value;
-    setSearchTitle(searchTitle);
-    findByTitle(searchTitle);
-  };
-
-  const searchDistilleryHandler = (e) => {
-    // const searchDistillery = e.target.value;
-    // setSearchDistillery(searchDistillery);
-    if (e.target.value != "All Distilleries")
-      find(e.target.value, "distillery");
-    else refreshList();
-  };
-
+  // DATA RETRIEVAL FUNCTIONS
   const retrieveWhiskies = () => {
     WhiskeyDataService.getWhiskies()
       .then((res) => {
-        // console.log(`Retrieved whiskies: ${res.data}`);
         setWhiskies(res.data.whiskies);
       })
       .catch((err) => console.log(`Error in retrieving whiskies: ${err}`));
@@ -43,27 +29,29 @@ const WhiskiesList = () => {
   const retrieveDistilleries = () => {
     WhiskeyDataService.getDistilleries()
       .then((res) => {
-        // console.log(`Retrieved distilleries: ${res.data}`);
-        setDistilleries(["All Distilleries"].concat(res.data));
+        res.data.forEach((distillery) => {
+          if (optionsArr.length < res.data.length)
+            return optionsArr.push({ value: distillery, label: distillery });
+        });
+        setOptions(optionsArr);
       })
+
       .catch((err) => {
         console.log(`Error in retrieving distilleries: ${err}`);
       });
   };
 
-  const refreshList = () => {
-    retrieveWhiskies();
+  // ****
+
+  // SEARCH HANDLERS
+
+  const searchTitleHandler = (e) => {
+    const searchTitle = e.target.value;
+    findByTitle(searchTitle);
   };
 
-  const find = (query, by) => {
-    WhiskeyDataService.find(query, by)
-      .then((res) => {
-        // console.log(`Data from find: ${JSON.stringify(res.data.whiskies)}`);
-        setWhiskies(res.data.whiskies);
-      })
-      .catch((err) => {
-        console.log(`Error when using find: ${err}`);
-      });
+  const searchDistilleryHandler = (e) => {
+    find(e.value, "distillery");
   };
 
   const findByTitle = (searchTitle) => {
@@ -74,14 +62,21 @@ const WhiskiesList = () => {
     find(e.target.value, "tags");
   };
 
-  // might not need this as distillery search happens onChange
-  // const findByDistillery = () => {
-  //   if (searchDistillery === "All Distilleries") {
-  //     refreshList();
-  //   } else {
-  //     find(searchDistillery, "distillery");
-  //   }
-  // };
+  const find = (query, by) => {
+    WhiskeyDataService.find(query, by)
+      .then((res) => {
+        setWhiskies(res.data.whiskies);
+      })
+      .catch((err) => {
+        console.log(`Error when using find: ${err}`);
+      });
+  };
+
+  // ******
+
+  const refreshList = () => {
+    retrieveWhiskies();
+  };
 
   return (
     <div className="whiskieListPageContainer">
@@ -89,6 +84,7 @@ const WhiskiesList = () => {
         className="logo"
         alt="Barley & Bait logo"
         src={require("../img/BARLEY-BAIT_logo_round_white-white.png")}
+        onClick={() => refreshList()}
       ></img>
       <div className="searchBars">
         <div className="searchContainer form-inline">
@@ -108,28 +104,10 @@ const WhiskiesList = () => {
         </div>
 
         <div className="selectContainer input-group">
-          <select>
-            {distilleries.map((distillery, i) => {
-              return (
-                <option
-                  onClick={searchDistilleryHandler}
-                  value={distillery}
-                  key={i}
-                >
-                  {distillery.substr(0, 20)}
-                </option>
-              );
-            })}
-          </select>
-          {/* <div className="input-group-append">
-            <button
-              className="btn btn-outline-secondary"
-              type="button"
-              onClick={findByDistillery}
-            >
-              Select
-            </button>
-          </div> */}
+          <SelectComponent
+            options={options}
+            onChange={(e) => searchDistilleryHandler(e)}
+          />
         </div>
       </div>
       <div className="whiskeyListContainer">

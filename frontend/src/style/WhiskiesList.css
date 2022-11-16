@@ -8,6 +8,7 @@
   width: 20em;
   height: 20em;
   margin-top: 1em;
+  cursor: pointer;
 }
 
 .searchBars {
@@ -28,38 +29,12 @@
   width: 25em;
 }
 
-.searchBars input {
-  margin-right: 1em;
-  font-size: 0.8em;
-}
-
 .searchContainer input {
   height: 3em;
   border: none;
+  font-size: 0.8em;
 }
 
-.searchContainer button {
-  margin: 0 !important;
-  padding: 0 0.5 0 0.5 !important;
-  height: 2.4em;
-}
-
-.searchBars .selectContainer select {
-  appearance: none;
-  width: 80%;
-  height: 2.56em;
-
-  border: 0.5px grey solid;
-  border-right: none;
-  border-radius: 0.35em;
-  font-size: 0.9em;
-  padding-left: 0.5em;
-}
-
-.searchBars .selectContainer button {
-  border-radius: 0 0.35em 0.35em 0;
-  border: 0.5px grey solid;
-  margin-left: -5em;
-  border-left: none;
-  width: 5em;
+.selectContainer > div {
+  width: 100%;
 }

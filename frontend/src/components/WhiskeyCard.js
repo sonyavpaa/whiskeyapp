@@ -8,6 +8,8 @@ const WhiskeyCard = ({ whiskey, tagClicked }) => {
       <p>
         {whiskey?.region} {whiskey.country}
       </p>
+      {whiskey?.cask ? <p>Cask: {whiskey?.cask}</p> : <p></p>}
+      {whiskey?.alc ? <p>{whiskey?.alc} &#8240;</p> : <p></p>}
 
       <p>{whiskey?.description}</p>
       <p>{whiskey?.price} € / 2cl</p>

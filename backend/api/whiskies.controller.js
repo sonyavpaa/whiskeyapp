@@ -60,25 +60,36 @@ export default class whiskiesController {
   }
 
   static async apiAddWhiskey(req, res, next) {
+    req.headers["content-type"] = "application/json; charset=UTF-8";
+    console.log("here req headers", req.headers);
+    // console.log("here res", res);
+
     try {
       // const whiskeyId = req.body.id;
-      const whiskeyTitle = req.body.whiskeyTitle;
-      const distillery = req.body.distillery;
-      const region = req.body.region;
-      const country = req.body.country;
-      const description = req.body.description;
-      const price = req.body.price;
-      const tags = req.body.tags;
+      const whiskeyTitle = await req.body.whiskeyTitle;
+      const distillery = await req.body.distillery;
+      const cask = await req.body.cask;
+      const alc = await req.body.alc;
+      const region = await req.body.region;
+      const country = await req.body.country;
+      const description = await req.body.description;
+      const price = await req.body.price;
+      const tags = await req.body.tags;
+
       const WhiskeyResponse = await WhiskiesDAO.addWhiskey(
         whiskeyTitle,
         distillery,
+        cask,
+        alc,
         region,
         country,
         description,
         price,
         tags
       );
-      res.json({ status: "success" });
+      res.json({
+        status: `success ${whiskeyTitle}`,
+      });
     } catch (err) {
       res.status(500).json({ error: err.message });
     }

@@ -19,9 +19,11 @@ class WhiskeyDataService {
     return http.get(`?${by}=${query}&page=${page}`);
   }
 
-  addWhiskey(data) {
-    return http.post("/action", data);
-  }
+  // addWhiskey(whiskeydata) {
+  //   console.log("http", http);
+
+  //   return http.post("/action", { whiskeyTitle: whiskeydata.whiskeyTitle });
+  // }
 
   editWhiskey(id, data) {
     return http.put(`/action?id=${id}`, data);

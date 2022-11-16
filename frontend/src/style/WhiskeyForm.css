@@ -1,3 +1,7 @@
+h1 {
+  color: white;
+}
+
 .formContainer {
   width: 100%;
   display: flex;
@@ -8,6 +12,11 @@
 
 .formContainer form {
   width: 70%;
+}
+
+.formContainer label {
+  color: white;
+  margin: 0.2em;
 }
 
 @import "https://unicons.iconscout.com/release/v4.0.0/css/thinline.css";
@@ -25,7 +34,10 @@ form {
 }
 
 .wrapper {
+  margin: 1em 0 1em 0 !important;
   padding: 1em;
+  background-color: rgba(111, 113, 111, 0.278);
+  border: none;
 }
 
 .wrapper label {
@@ -38,22 +50,24 @@ form {
 
 .content ul {
   display: flex;
+
   flex-wrap: wrap;
-  padding: 7px;
-  border: 1px solid #a6a6a6;
-  border-radius: 0.3em;
+
+  width: 100%;
+  padding-left: 0;
 }
 
 .content ul li {
   list-style: none;
   display: flex;
   flex-direction: row;
-  background: #492712;
+  background: #dd8023;
   color: white;
   padding: 0.5em;
   border-radius: 0.3em;
   margin: 0 0.5em 0 0;
   border: none;
+  cursor: pointer;
 }
 
 .content ul li span {
@@ -71,14 +85,17 @@ form {
 
 .content ul input {
   width: 100%;
-  flex: 1;
+  flex: 1em;
   outline: none;
   padding: 5px;
   font-size: 1em;
   border: none;
+
+  border-radius: 0.3em;
 }
 
 .wrapper .details {
   display: flex;
   justify-content: space-between;
+  color: white;
 }

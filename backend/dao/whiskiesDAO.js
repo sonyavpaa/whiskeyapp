@@ -53,35 +53,6 @@ export default class WhiskiesDAO {
     }
   }
 
-  // static async getWhiskeyById(id) {
-  //   try{
-  //     const pipeline = [
-  //       {
-  //         $match: {
-  //           _id: new ObjectId(id),
-  //         },
-  //       },
-  //       {
-  //         $lookup:{
-  //           from: "whiskies",
-  //           let: {
-  //             id: "$_id",
-  //           },
-  //           pipeline: [
-  //             {
-  //               $match: {
-  //                 $expr: {
-  //                   $eq: ["$$id"],
-  //                 }
-  //               }
-  //             }
-  //           ]
-  //         }
-  //       }
-  //     ]
-  //   }
-  // };
-
   static async getWhiskeyDistilleries() {
     let distilleries = [];
     try {
@@ -96,22 +67,28 @@ export default class WhiskiesDAO {
   static async addWhiskey(
     whiskeyTitle,
     distillery,
+    cask,
+    alc,
     region,
     country,
     description,
     price,
     tags
   ) {
+    console.log("from add whiskey DAO", whiskeyTitle);
     try {
       const whiskeyDoc = {
         whiskeyTitle: whiskeyTitle,
         distillery: distillery,
+        cask: cask,
+        alc: alc,
         region: region,
         country: country,
         description: description,
         price: price,
         tags: tags,
       };
+      console.log("doc", whiskeyDoc);
       return await whiskies.insertOne(whiskeyDoc);
     } catch (err) {
       console.error(`Unable to add whiskey: ${err}`);
@@ -127,6 +104,8 @@ export default class WhiskiesDAO {
           $set: {
             whiskeyTitle: data.whiskeyTitle,
             distillery: data.distillery,
+            cask: data.cask,
+            alc: data.alc,
             region: data.region,
             country: data.country,
             description: data.description,
