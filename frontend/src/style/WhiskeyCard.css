@@ -9,16 +9,39 @@
   font-family: "Abril Fatface", cursive;
 }
 
+.whiskeyCard .headerContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.whiskeyCard .headerContainer a {
+  text-decoration: none;
+  border-radius: 0.5em;
+  padding: 0.2em 0.5em 0.2em 0.5em;
+  height: max-content;
+  background-color: rgb(224, 207, 153);
+  color: rgb(107, 10, 10);
+}
+
 .whiskeyCard p {
   color: white;
   font-family: "Nixie One", cursive;
   margin-bottom: 0.5em;
 }
 
+.cask {
+  border: none;
+  background-color: transparent;
+  color: rgb(224, 207, 153);
+  cursor: pointer;
+}
+
 .tagsContainer {
-  width: 100%;
+  width: 90%;
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
 }
 
 .tagsContainer button {

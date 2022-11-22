@@ -1,37 +1,47 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import "../style/WhiskeyForm.css";
-// import WhiskeyDataService from "../services/whiskies";
-// import whiskies from "../services/whiskies";
+import WhiskeyDataService from "../services/whiskies";
+
 let tags = [];
 
-const AddWhiskey = () => {
-  // *** Some pre setups for editing whiskey feature
-  // let initialWhiskeyState = "";
-  let editing = false;
+const AddWhiskey = (props) => {
+  const [user, setUser] = useState();
+  const [editing, setEditing] = useState(false);
+  const [whiskeyId, setWhiskeyId] = useState();
+  const [whiskey, setWhiskey] = useState();
 
-  // if (props?.location?.state && props?.location?.state?.currentWhiskey) {
-  //   editing = true;
-  //   initialWhiskeyState = props?.location?.state?.currentWhiskey;
-  // }
+  const location = useLocation();
+  const navigate = useNavigate();
 
-  // ***
-
-  const [userCheck, setUserCheck] = useState();
-
-  const checkUser = () => {
-    if (localStorage.getItem("isLoggedIn") === "true") {
-      setUserCheck(true);
-    } else console.log("user is not logged in");
+  const checkWhiskey = () => {
+    if (location.pathname.split("/")[1] === "editwhiskey") {
+      setWhiskeyId(location.pathname.split("/")[2]);
+    }
+    if (whiskeyId) {
+      WhiskeyDataService.find(whiskeyId, "id")
+        .then((res) => {
+          setWhiskey(res.data.whiskies[0]);
+          tags = res.data.whiskies[0].tags;
+          createTag();
+          setInputData(res.data.whiskies[0]);
+          setEditing(true);
+        })
+        .catch((err) => {
+          console.log(`Error when using find: ${err}`);
+        });
+    }
   };
 
   useEffect(() => {
-    checkUser();
-  }, []);
+    checkWhiskey();
+    setUser(props.user);
+  }, [whiskeyId, user, props.user]);
 
   const [inputData, setInputData] = useState({
     whiskeyTitle: "default",
-    distillery: "",
+    distillery: [],
     cask: "",
     alc: 0,
     region: "",
@@ -66,24 +76,55 @@ const AddWhiskey = () => {
       tags: inputData.tags,
     };
 
-    var config = {
-      method: "post",
-      url: process.env.REACT_APP_WHISKEY_URL + "/api/v1/whiskies/action",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      data: JSON.stringify(whiskey),
-    };
+    console.log("input whiskey", whiskey);
 
-    axios(config)
-      .then(function (response) {
-        console.log(JSON.stringify(response.data));
-      })
-      .catch(function (error) {
-        console.log(error);
+    if (location.pathname.split("/")[1] === "editwhiskey") {
+      const config = {
+        method: "put",
+        url: `${process.env.REACT_APP_WHISKEY_URL}/action?id=${whiskeyId}`,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: JSON.stringify(whiskey),
+      };
+
+      await axios(config)
+        .then(function (response) {
+          console.log("whiskey edited: ", JSON.stringify(response.data));
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    } else if (location.pathname.split("/")[1] === "addwhiskey") {
+      let config = {
+        method: "post",
+        url: process.env.REACT_APP_WHISKEY_URL + "/action",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: JSON.stringify(whiskey),
+      };
+
+      await axios(config)
+        .then(function (response) {
+          console.log("whiskey added: ", JSON.stringify(response.data));
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
+    navigate("/");
+  };
+
+  const deleteWhiskey = async (e) => {
+    e.preventDefault();
+
+    await WhiskeyDataService.deleteWhiskey(whiskeyId)
+      .then((res) => console.log("delete res", res))
+      .catch((err) => {
+        console.log(err);
       });
-
-    // window.location = "/";
+    navigate("/");
   };
 
   // ****** ADDING TAGS ******
@@ -160,10 +201,44 @@ const AddWhiskey = () => {
 
   // ******************
 
-  if (userCheck === true) {
+  // ***** ADDING DISTILLERY AND CASK ******
+  // Adds a distillery value to the distilleryArray seperated by comma (',') and trims white space from both ends
+  const addDistillery = (e) => {
+    let distillery = [];
+    let distString = e.target.value;
+    let trimArr = distString.split(",");
+    trimArr.forEach((dist) => {
+      let trimmedDist = dist.trim();
+      if (trimmedDist.length > 0) distillery.push(trimmedDist);
+    });
+    setInputData({ ...inputData, distillery });
+  };
+
+  const addCask = (e) => {
+    let cask = [];
+    let caskString = e.target.value;
+    let trimArr = caskString.split(",");
+    trimArr.forEach((dist) => {
+      let trimmedCask = dist.trim();
+      if (trimmedCask.length > 0) cask.push(trimmedCask);
+    });
+    setInputData({ ...inputData, cask });
+  };
+
+  if (user) {
     return (
       <div className="formContainer">
         <h1>{editing ? "Edit whiskey" : "Add whiskey"}</h1>
+        {editing ? (
+          <form
+            className="deleteWhiskeyForm"
+            onSubmit={(e) => deleteWhiskey(e)}
+          >
+            <button>Delete whiskey</button>
+          </form>
+        ) : (
+          ""
+        )}
         <form
           onKeyPress={(e) => {
             if (e.key === "Enter") e.preventDefault();
@@ -177,6 +252,7 @@ const AddWhiskey = () => {
               className="form-control"
               id="whiskeyTitle"
               name="whiskeyTitle"
+              defaultValue={whiskey ? whiskey?.whiskeyTitle : ""}
               placeholder="e.g. Kyrö Wood Smoke"
               onChange={changeData}
             />
@@ -188,8 +264,9 @@ const AddWhiskey = () => {
               className="form-control"
               id="distillery"
               name="distillery"
+              defaultValue={whiskey ? whiskey?.distillery : ""}
               placeholder="e.g. Kyrö Distillery"
-              onChange={changeData}
+              onChange={addDistillery}
             />
           </div>
           <div className="form-group">
@@ -199,8 +276,9 @@ const AddWhiskey = () => {
               className="form-control"
               id="cask"
               name="cask"
+              defaultValue={whiskey ? whiskey?.cask : ""}
               placeholder="e.g. Sherry/Amarone"
-              onChange={changeData}
+              onChange={addCask}
             />
           </div>
           <div className="form-group">
@@ -211,6 +289,7 @@ const AddWhiskey = () => {
               className="form-control"
               id="alc"
               name="alc"
+              defaultValue={whiskey ? whiskey?.alc : ""}
               placeholder="e.g. 52"
               onChange={changeData}
             />
@@ -222,6 +301,7 @@ const AddWhiskey = () => {
               className="form-control"
               id="region"
               name="region"
+              defaultValue={whiskey ? whiskey?.region : ""}
               placeholder="e.g. Osterbothnia"
               onChange={changeData}
             />
@@ -233,6 +313,7 @@ const AddWhiskey = () => {
               className="form-control"
               id="country"
               name="country"
+              defaultValue={whiskey ? whiskey?.country : ""}
               placeholder="e.g. Finland"
               onChange={changeData}
             />
@@ -243,6 +324,7 @@ const AddWhiskey = () => {
               className="form-control"
               id="description"
               name="description"
+              defaultValue={whiskey ? whiskey?.description : ""}
               rows="3"
               onChange={changeData}
             ></textarea>
@@ -255,6 +337,7 @@ const AddWhiskey = () => {
               className="form-control"
               id="price"
               name="price"
+              defaultValue={whiskey ? whiskey?.price : ""}
               placeholder="e.g. 500"
               onChange={changeData}
             />
@@ -268,6 +351,7 @@ const AddWhiskey = () => {
                   id="tags"
                   onKeyDown={addTag}
                   onKeyUp={checkComma}
+                  defaultValue={tags ? "" : ""}
                   placeholder="Enter comma after each tag"
                 />
               </ul>
@@ -278,12 +362,14 @@ const AddWhiskey = () => {
               </p>
             </div>
           </div>
-          <input
+          <button
             className="button form-control"
             type="submit"
             value="Add whiskey"
             onClick={onSubmit}
-          />
+          >
+            {editing ? "Edit whiskey" : "Add whiskey"}
+          </button>
         </form>
       </div>
     );

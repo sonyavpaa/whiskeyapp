@@ -11,22 +11,8 @@ class WhiskeyDataService {
     return http.get(`distilleries`);
   }
 
-  // get(id) {
-  //     return http.get(`id/${id}`)
-  // }
-
   find(query, by = "whiskeyTitle", page = 0) {
     return http.get(`?${by}=${query}&page=${page}`);
-  }
-
-  // addWhiskey(whiskeydata) {
-  //   console.log("http", http);
-
-  //   return http.post("/action", { whiskeyTitle: whiskeydata.whiskeyTitle });
-  // }
-
-  editWhiskey(id, data) {
-    return http.put(`/action?id=${id}`, data);
   }
 
   deleteWhiskey(id) {

@@ -6,10 +6,17 @@ const selectStyles = {
     ...provided,
   }),
 
-  control: (provided) => ({
+  control: (provided, { isSelected, isFocused }) => ({
     ...provided,
-    border: "none",
+    outline: "none",
+    border: "1px solid orange",
+    borderRadius: "1em",
     boxShadow: "none",
+    backgroundColor: "trasparent",
+    "&:hover": {
+      borderColor: "orange",
+      color: "red",
+    },
   }),
 
   option: (styles, { isDisabled, isFocused, isSelected }) => {
@@ -18,7 +25,7 @@ const selectStyles = {
       backgroundColor: isDisabled
         ? undefined
         : isSelected
-        ? "rgba(15, 19, 15, 0.891)"
+        ? "orange"
         : isFocused
         ? " #dd8023"
         : undefined,
@@ -39,7 +46,10 @@ const selectStyles = {
   input: (styles) => ({ ...styles }),
   placeholder: (styles) => ({ ...styles }),
 
-  singleValue: (styles) => ({ ...styles }),
+  singleValue: (styles, { isFocused }) => ({
+    ...styles,
+    color: isFocused ? "" : "white",
+  }),
 };
 
 const SelectComponent = (props) => {
@@ -49,7 +59,9 @@ const SelectComponent = (props) => {
       options={props.options}
       onChange={props.onChange}
       styles={selectStyles}
-      placeholder="Select distillery"
+      placeholder={
+        <div style={{ color: "rgb(158, 154, 154)" }}>Select distillery</div>
+      }
     />
   );
 };

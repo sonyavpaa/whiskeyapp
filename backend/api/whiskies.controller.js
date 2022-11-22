@@ -10,10 +10,14 @@ export default class whiskiesController {
     const page = req.query.page ? parseInt(req.query.page, 10) : 0;
 
     let filters = {};
-    if (req.query.distillery) {
-      filters.distillery = req.query.distillery;
-    } else if (req.query.whiskeyTitle) {
+    if (req.query.whiskeyTitle) {
       filters.whiskeyTitle = req.query.whiskeyTitle;
+    } else if (req.query.id) {
+      filters.id = req.query.id;
+    } else if (req.query.distillery) {
+      filters.distillery = req.query.distillery;
+    } else if (req.query.cask) {
+      filters.cask = req.query.cask;
     } else if (req.query.tags) {
       filters.tags = req.query.tags;
     }
@@ -34,21 +38,6 @@ export default class whiskiesController {
     res.json(response);
   }
 
-  // static async apiGetWhiskeyById(res, req, next) {
-  //   try {
-  //     let id = req.params.id || {};
-  //     let whiskey = await WhiskiesDAO.getWhiskeyById(id);
-  //     if (!whiskey) {
-  //       res.status(404).json({ error: "Not found :-(" });
-  //       return;
-  //     }
-  //     res.json(whiskey);
-  //   } catch (err) {
-  //     console.log(`api, ${err}`);
-  //     res.status(500).json({ error: err });
-  //   }
-  // }
-
   static async apiGetWhiskeyDistilleries(req, res, next) {
     try {
       let distilleries = await WhiskiesDAO.getWhiskeyDistilleries();
@@ -61,8 +50,6 @@ export default class whiskiesController {
 
   static async apiAddWhiskey(req, res, next) {
     req.headers["content-type"] = "application/json; charset=UTF-8";
-    console.log("here req headers", req.headers);
-    // console.log("here res", res);
 
     try {
       // const whiskeyId = req.body.id;

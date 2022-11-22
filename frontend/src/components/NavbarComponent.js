@@ -28,7 +28,7 @@ function NavbarCustom(props) {
             style={{ maxHeight: "100px" }}
             navbarScroll
           >
-            <Nav.Link href="addwhiskey">Add whiskey</Nav.Link>
+            <Nav.Link href="/addwhiskey">Add whiskey</Nav.Link>
 
             {userCheck ? (
               <a

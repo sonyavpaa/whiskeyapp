@@ -1,0 +1,28 @@
+.loginPageContainer {
+  width: 100%;
+  margin-top: 3em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.loginPageContainer form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.loginPageContainer input {
+  margin-bottom: 1em;
+  padding: 0.1em;
+  padding-left: 0.5em;
+  border: none;
+  border-radius: 0.3em;
+}
+
+.loginPageContainer button {
+  background-color: white;
+  border: none;
+  border-radius: 0.3em;
+  padding: 0.2em 1em 0.2em 1em;
+}

@@ -24,15 +24,19 @@ export default class WhiskiesDAO {
     if (filters) {
       if ("whiskeyTitle" in filters) {
         query = { $text: { $search: filters["whiskeyTitle"] } };
+      } else if ("id" in filters) {
+        query = { _id: { $eq: ObjectId(filters["id"]) } };
       } else if ("distillery" in filters) {
         query = { distillery: { $eq: filters["distillery"] } };
+      } else if ("cask" in filters) {
+        query = { cask: { $elemMatch: { $eq: filters["cask"] } } };
       } else if ("tags" in filters) {
         query = { tags: { $elemMatch: { $eq: filters["tags"] } } };
       }
     }
     let cursor;
     try {
-      cursor = await whiskies.find(query);
+      cursor = await whiskies.find(query).sort({ region: 1 });
     } catch (err) {
       console.error(`Unable to issue find command, ${err}`);
       return { whiskiesList: [], totalNumWhiskies: 0 };
@@ -75,7 +79,6 @@ export default class WhiskiesDAO {
     price,
     tags
   ) {
-    console.log("from add whiskey DAO", whiskeyTitle);
     try {
       const whiskeyDoc = {
         whiskeyTitle: whiskeyTitle,
@@ -97,6 +100,7 @@ export default class WhiskiesDAO {
   }
 
   static async editWhiskey(whiskeyQueryid, data) {
+    console.log("data here", data);
     try {
       const editResponse = await whiskies.updateOne(
         { _id: ObjectId(whiskeyQueryid) },

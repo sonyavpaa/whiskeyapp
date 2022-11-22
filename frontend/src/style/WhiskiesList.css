@@ -17,6 +17,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  font-family: Poppins;
 }
 
 .searchBars .searchContainer,
@@ -30,11 +31,43 @@
 }
 
 .searchContainer input {
-  height: 3em;
-  border: none;
-  font-size: 0.8em;
+  height: 36.6px;
+  border: 1px solid orange;
+  border-radius: 1em;
+  font-size: 1em;
+  background-color: transparent;
+  color: white;
+}
+
+.searchContainer input::placeholder {
+  color: rgb(158, 154, 154);
+}
+
+.searchContainer input:focus {
+  outline: none !important;
+  box-shadow: none !important;
+  border: 1px solid orange;
 }
 
 .selectContainer > div {
   width: 100%;
+}
+
+.emptyFilters {
+  border: none;
+  background-color: transparent;
+  color: wheat;
+  height: 2.67em;
+  font-family: Poppins;
+  margin-bottom: 1em;
+}
+
+.fill {
+  height: 2.67em;
+  margin-bottom: 1em;
+}
+
+.countryLabel {
+  color: wheat;
+  font-family: Abril fatface;
 }

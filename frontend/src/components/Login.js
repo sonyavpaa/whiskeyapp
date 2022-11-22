@@ -1,7 +1,11 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "../style/Login.css";
 
 const Login = () => {
   const [user, setUser] = useState();
+
+  const navigate = useNavigate();
 
   const login = (e) => {
     e.preventDefault();
@@ -9,21 +13,26 @@ const Login = () => {
       localStorage.setItem("isLoggedIn", "true");
       console.log("login succesful");
     } else console.log("wrong username");
+    document.getElementById("user").value = "";
+    navigate("/");
+    window.location.reload(false);
   };
 
   return (
-    <div>
+    <section className="loginPageContainer">
       <form onSubmit={(e) => login(e)}>
         <input
           name="user"
           id="user"
+          type="password"
           onChange={(e) => setUser(e.currentTarget.value)}
-          placeholder="Login user"
+          placeholder="Enter username"
           input={user}
+          autocomplete="off"
         />
-        <button type="submit">login</button>
+        <button type="submit">Log in</button>
       </form>
-    </div>
+    </section>
   );
 };
 

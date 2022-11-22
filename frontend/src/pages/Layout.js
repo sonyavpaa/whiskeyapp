@@ -3,9 +3,13 @@ import { Outlet } from "react-router-dom";
 import NavbarComponent from "../components/NavbarComponent";
 
 const LayOut = (props) => {
+  const user = props.user;
+  console.log("user from layout:", user);
+
   return (
     <React.Fragment>
-      <NavbarComponent />
+      {user ? <NavbarComponent /> : ""}
+
       <div>
         <Outlet />
       </div>

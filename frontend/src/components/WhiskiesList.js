@@ -8,9 +8,16 @@ import SelectComponent from "./SelectComponent";
 
 let optionsArr = [{ value: "", label: "All Distilleries" }];
 
-const WhiskiesList = () => {
-  const [whiskies, setWhiskies] = useState([]);
+const WhiskiesList = (props) => {
+  const [scotland, setScotland] = useState([]);
+  const [ireland, setIreland] = useState([]);
+  const [finland, setFinland] = useState([]);
+  const [japan, setJapan] = useState([]);
+  const [usa, setUsa] = useState([]);
+  const [filtersOn, setFiltersOn] = useState(false);
+  const [othersCounties, setOtherCountries] = useState([]);
   const [options, setOptions] = useState([]);
+  const user = props.user;
 
   useEffect(() => {
     retrieveWhiskies();
@@ -21,7 +28,8 @@ const WhiskiesList = () => {
   const retrieveWhiskies = () => {
     WhiskeyDataService.getWhiskies()
       .then((res) => {
-        setWhiskies(res.data.whiskies);
+        sortWhiskies(res.data.whiskies);
+        setFiltersOn(false);
       })
       .catch((err) => console.log(`Error in retrieving whiskies: ${err}`));
   };
@@ -41,6 +49,38 @@ const WhiskiesList = () => {
       });
   };
 
+  const sortWhiskies = async (whiskeyData) => {
+    let scotchArr = [];
+    let irishArr = [];
+    let finnishArr = [];
+    let japaneseArr = [];
+    let usaArr = [];
+    let othersArr = [];
+
+    await whiskeyData.forEach((whiskey) => {
+      if (whiskey.country === "Scotland") {
+        scotchArr.push(whiskey);
+      } else if (whiskey.country === "Ireland") {
+        irishArr.push(whiskey);
+      } else if (whiskey.country === "Finland") {
+        finnishArr.push(whiskey);
+      } else if (whiskey.country === "Japan") {
+        japaneseArr.push(whiskey);
+      } else if (whiskey.country === "USA") {
+        usaArr.push(whiskey);
+      } else {
+        othersArr.push(whiskey);
+      }
+    });
+
+    setScotland(scotchArr);
+    setIreland(irishArr);
+    setFinland(finnishArr);
+    setJapan(japaneseArr);
+    setUsa(usaArr);
+    setOtherCountries(othersArr);
+  };
+
   // ****
 
   // SEARCH HANDLERS
@@ -58,40 +98,54 @@ const WhiskiesList = () => {
     find(searchTitle, "whiskeyTitle");
   };
 
+  const findByCask = (e) => {
+    goToTop();
+    find(e.currentTarget.value, "cask");
+  };
+
   const findByTag = (e) => {
+    goToTop();
     find(e.target.value, "tags");
   };
 
-  const find = (query, by) => {
-    WhiskeyDataService.find(query, by)
+  const find = async (query, by) => {
+    await WhiskeyDataService.find(query, by)
       .then((res) => {
-        setWhiskies(res.data.whiskies);
+        sortWhiskies(res.data.whiskies);
       })
       .catch((err) => {
         console.log(`Error when using find: ${err}`);
       });
+    setFiltersOn(true);
+  };
+
+  const epmtyFiltersHandler = () => {
+    retrieveWhiskies();
   };
 
   // ******
 
-  const refreshList = () => {
-    retrieveWhiskies();
+  const goToTop = () => {
+    window.scrollTo({
+      top: 200,
+      behavior: "smooth",
+    });
   };
 
   return (
-    <div className="whiskieListPageContainer">
+    <section className="whiskieListPageContainer">
       <img
         className="logo"
         alt="Barley & Bait logo"
         src={require("../img/BARLEY-BAIT_logo_round_white-white.png")}
-        onClick={() => refreshList()}
+        onClick={() => window.location.reload()}
       ></img>
       <div className="searchBars">
         <div className="searchContainer form-inline">
           <input
             className="form-control mr-sm-2"
             type="search"
-            placeholder="Search whiskies by title..."
+            placeholder="Search by title"
             // value={searchTitle}
             onChange={(e) => searchTitleHandler(e)}
             aria-label="Search"
@@ -110,19 +164,93 @@ const WhiskiesList = () => {
           />
         </div>
       </div>
+      {filtersOn ? (
+        <button className="emptyFilters" onClick={epmtyFiltersHandler}>
+          empty filters
+        </button>
+      ) : (
+        <div style={{ visibility: "hidden" }} className="fill"></div>
+      )}
       <div className="whiskeyListContainer">
-        {whiskies.map((whiskey, i) => {
+        {scotland.length > 0 ? <h2 className="countryLabel">SCOTLAND</h2> : ""}
+        {scotland?.map((whiskey, i) => {
           return (
             <WhiskeyCard
               whiskey={whiskey}
               key={i}
               tagClicked={(e) => findByTag(e)}
+              caskClicked={(e) => findByCask(e)}
+              user={user}
             />
           );
         })}
-        whiskies will be listed here
+        {ireland.length > 0 ? <h2 className="countryLabel">IRELAND</h2> : ""}
+        {ireland?.map((whiskey, i) => {
+          return (
+            <WhiskeyCard
+              whiskey={whiskey}
+              key={i}
+              tagClicked={(e) => findByTag(e)}
+              caskClicked={(e) => findByCask(e)}
+              user={user}
+            />
+          );
+        })}
+        {finland.length > 0 ? <h2 className="countryLabel">FINLAND</h2> : ""}
+        {finland?.map((whiskey, i) => {
+          return (
+            <WhiskeyCard
+              whiskey={whiskey}
+              key={i}
+              tagClicked={(e) => findByTag(e)}
+              caskClicked={(e) => findByCask(e)}
+              user={user}
+            />
+          );
+        })}
+        {japan.length > 0 ? <h2 className="countryLabel">JAPAN</h2> : ""}
+        {japan?.map((whiskey, i) => {
+          return (
+            <WhiskeyCard
+              whiskey={whiskey}
+              key={i}
+              tagClicked={(e) => findByTag(e)}
+              caskClicked={(e) => findByCask(e)}
+              user={user}
+            />
+          );
+        })}
+        {usa.length > 0 ? <h2 className="countryLabel">USA</h2> : ""}
+        {usa?.map((whiskey, i) => {
+          return (
+            <WhiskeyCard
+              whiskey={whiskey}
+              key={i}
+              tagClicked={(e) => findByTag(e)}
+              caskClicked={(e) => findByCask(e)}
+              user={user}
+            />
+          );
+        })}
+        {othersCounties.length > 0 ? (
+          <h2 className="countryLabel">OTHER COUNTRIES</h2>
+        ) : (
+          ""
+        )}
+        ;
+        {othersCounties?.map((whiskey, i) => {
+          return (
+            <WhiskeyCard
+              whiskey={whiskey}
+              key={i}
+              tagClicked={(e) => findByTag(e)}
+              caskClicked={(e) => findByCask(e)}
+              user={user}
+            />
+          );
+        })}
       </div>
-    </div>
+    </section>
   );
 };
 
